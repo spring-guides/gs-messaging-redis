@@ -17,16 +17,11 @@ public class Config {
 
 	@Bean
 	RedisMessageListenerContainer container() {
-		return new RedisMessageListenerContainer() {{
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer() {{
 			setConnectionFactory(connectionFactory());
 		}};
-	}
-	
-	@Bean
-	Receiver receiver() {
-		Receiver receiver = new Receiver();
-		container().addMessageListener(receiver, new PatternTopic("chat"));
-		return receiver;
+		container.addMessageListener(new Receiver(), new PatternTopic("chat"));
+		return container;
 	}
 	
 	@Bean
