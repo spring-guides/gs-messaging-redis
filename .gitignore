@@ -9,6 +9,7 @@ bin
 target
 build/
 .gradle
+dependency-reduced-pom.xml
 
 # Eclipse Project Files #
 
