@@ -1,27 +1,89 @@
-Getting Started: Messaging with Redis
-=====================================
+# Getting Started: Messaging with Redis
 
-This Getting Started guide will walk you through the process of setting up a Redis key-value server and then using it to publish and subscribe for messages.
+What you'll build
+-----------------
 
-To help you get started, we've provided an initial project structure as well as the completed project for you in GitHub:
+This guide walks you through the process of publishing and subscribing to messages sent via Redis with Spring.
 
-```sh
-$ git clone https://github.com/springframework-meta/gs-messaging-redis
+What you'll need
+----------------
+
+ - About 15 minutes
+ - {!snippet:prereq-editor-jdk-buildtools}
+
+## {!snippet:how-to-complete-this-guide}
+
+<a name="scratch"></a>
+Set up the project
+------------------
+
+{!snippet:build-system-intro}
+
+{!snippet:create-directory-structure-hello}
+
+### Create a Maven POM
+
+{!snippet:maven-project-setup-options}
+
+`pom.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.springframework</groupId>
+    <artifactId>gs-messaging-redis</artifactId>
+    <version>0.1.0</version>
+
+    <parent>
+        <groupId>org.springframework.bootstrap</groupId>
+        <artifactId>spring-bootstrap-starters</artifactId>
+        <version>0.5.0.BUILD-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+    </dependencies>
+
+    <!-- TODO: remove once bootstrap goes GA -->
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>http://repo.springsource.org/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>http://repo.springsource.org/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>
 ```
 
-In the `initial` folder, you'll find a bare project, ready for you to copy-n-paste code snippets from this document. In the `complete` folder, you'll find the complete project code.
+{!snippet:bootstrap-starter-pom-disclaimer}
 
-Before we code a publishe and subscriber, there is some initial project setup that's required. Or, you can skip straight to the [fun part](#setting-up-a-redis-server).
 
-Selecting Dependencies
-----------------------
-The sample in this Getting Started Guide will leverage Spring Data Redis and use slf4j for logging while running a Redis server. Therefore, the following dependencies are needed in the project's build configuration:
-
-- org.springframework.data:spring-data-redis:1.0.3.RELEASE
-- org.slf4j:slf4j-log4j12:1.7.5
-
-Refer to the [Gradle Getting Started Guide]() or the [Maven Getting Started Guide]() for details on how to include these dependencies in your build.
-
+<a name="initial"></a>
 Configuring a runnable application
 ----------------------------------
 
@@ -227,26 +289,25 @@ Here we can see three key components.
 - `template()` creates an instance of `StringRedisTemplate`, providing us the means to publish messages.
 - `connectionFactory()` is responsible for creating a `JedisConnectionFactory`, needed for both the `RedisMessageListenerContainer` and `StringRedisTemplate` to reach the Redis server.
 
-Building and Running our Application
-------------------------------------
 
-With our message sender and receiver coded, along with wiring up components in between, we can run our application.
+## {!snippet:build-an-executable-jar}
 
-```sh
-$ ./gradlew run
-```
+Run the application
+-------------------
+Run your application with `java -jar` at the command line:
 
-We should see something like:
+    java -jar target/gs-messaging-redis-0.1.0.jar
 
-```sh
-0    [main] INFO  org.springframework.context.annotation.AnnotationConfigApplicationContext  - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4521cef5: startup date [Wed May 01 15:02:42 CDT 2013]; root of context hierarchy
-175  [main] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory  - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@693b004c: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,config,org.springframework.context.annotation.ConfigurationClassPostProcessor.importAwareProcessor,template,container,connectionFactory]; root of factory hierarchy
-277  [main] INFO  org.springframework.context.support.DefaultLifecycleProcessor  - Starting beans in phase 2147483647
-Waiting five seconds...
-Sending message...
-Received <Hello from Redis!>
-```
 
-Next Steps
-----------
-Congratulations! You just setup Redis and used it as a messaging system inside an application.
+You should see the following output:
+
+	0    [main] INFO  org.springframework.context.annotation.AnnotationConfigApplicationContext  - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4521cef5: startup date [Wed May 01 15:02:42 CDT 2013]; root of context hierarchy
+	175  [main] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory  - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@693b004c: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,config,org.springframework.context.annotation.ConfigurationClassPostProcessor.importAwareProcessor,template,container,connectionFactory]; root of factory hierarchy
+	277  [main] INFO  org.springframework.context.support.DefaultLifecycleProcessor  - Starting beans in phase 2147483647
+	Waiting five seconds...
+	Sending message...
+	Received <Hello from Redis!>
+
+Summary
+-------
+Congrats! You've just developed a simple publisher and subscriber application using Spring and Redis. There's more you can do with Spring and Redis than what is covered here, but this should provide a good start.
