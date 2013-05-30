@@ -1,4 +1,4 @@
-package messagingredis;
+package hello;
 
 import org.springframework.context.annotation.Configuration;
 
