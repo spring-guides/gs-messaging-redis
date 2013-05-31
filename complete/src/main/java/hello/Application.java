@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class Application {
@@ -20,8 +21,15 @@ public class Application {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer() {{
             setConnectionFactory(connectionFactory);
         }};
-        container.addMessageListener(new Receiver(), new PatternTopic("chat"));
+        container.addMessageListener(listenerAdapter(), new PatternTopic("chat"));
         return container;
+    }
+    
+    @Bean
+    MessageListenerAdapter listenerAdapter() {
+        MessageListenerAdapter adapter = new MessageListenerAdapter(new Receiver());
+        adapter.setDefaultListenerMethod("receiveMessage");
+        return adapter;
     }
     
     @Bean
@@ -32,6 +40,7 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Application.class);
         StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
+        System.out.println("Sending message...");
         template.convertAndSend("chat", "Hello from Redis!");
         ctx.close();
     }

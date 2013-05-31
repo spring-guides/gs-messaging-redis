@@ -131,22 +131,16 @@ In any messaging-based application, there are message publishers and messing rec
 
 `src/main/java/hello/Receiver.java`
 ```java
-package messagingredis;
+package hello;
 
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-
-public class Receiver implements MessageListener {
-
-	@Override
-	public void onMessage(Message message, byte[] pattern) {
-		System.out.println("Received <" + message.toString() + ">");
-	}
-
+public class Receiver {
+    public void receiveMessage(String message) {
+        System.out.println("Received <" + message + ">");
+    }
 }
 ```
 
-The `Receiver` implements `MessageListener`'s `onMessage()` method to accept messages as they arrive. Here it simply prints the message to the console.
+The `Receiver` is a simple POJO that defines a method for receiving messages. As you'll see when you register the `Receiver` as a message listener, the message-handling method doesn't need to be given any specific name; you can name it whatever you want.
 
 Registering the listener and sending a message
 ----------------------------------------------
@@ -170,6 +164,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class Application {
@@ -183,8 +178,15 @@ public class Application {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer() {{
             setConnectionFactory(connectionFactory);
         }};
-        container.addMessageListener(new Receiver(), new PatternTopic("chat"));
+        container.addMessageListener(listenerAdapter(), new PatternTopic("chat"));
         return container;
+    }
+    
+    @Bean
+    MessageListenerAdapter listenerAdapter() {
+        MessageListenerAdapter adapter = new MessageListenerAdapter(new Receiver());
+        adapter.setDefaultListenerMethod("receiveMessage");
+        return adapter;
     }
     
     @Bean
@@ -195,6 +197,7 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Application.class);
         StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
+        System.out.println("Sending message...");
         template.convertAndSend("chat", "Hello from Redis!");
         ctx.close();
     }
@@ -203,7 +206,7 @@ public class Application {
 
 This example sets up a `JedisConnectionFactory`, a Redis connection factory based on the [Jedis](https://github.com/xetorthio/jedis) Redis library. That connection factory is injected into both the message listener container and the Redis template.
 
-The message listener container is configured as a `RedisMessageListenerContainer` bean that is given a single instance of the `Receiver` class to listen on the "chat" topic.
+The bean defined in the `listenerAdapter()` method is registered as a message listener in the message listener container defined in `container()` and will listen for messages on the "chat" topic. Since the `Receiver` class is a POJO, it needs to be wraped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to know to call the `receiveMessage()` method on `Receiver` when a message arrives.
 
 The connection factory and message listener container beans are all you need to listen for messages. To send a message you'll also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
 
@@ -220,10 +223,6 @@ Run your application with `java -jar` at the command line:
 
 You should see the following output:
 
-	0    [main] INFO  org.springframework.context.annotation.AnnotationConfigApplicationContext  - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4521cef5: startup date [Wed May 01 15:02:42 CDT 2013]; root of context hierarchy
-	175  [main] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory  - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@693b004c: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,config,org.springframework.context.annotation.ConfigurationClassPostProcessor.importAwareProcessor,template,container,connectionFactory]; root of factory hierarchy
-	277  [main] INFO  org.springframework.context.support.DefaultLifecycleProcessor  - Starting beans in phase 2147483647
-	Waiting five seconds...
 	Sending message...
 	Received <Hello from Redis!>
 
