@@ -10,6 +10,7 @@ What you'll need
 
  - About 15 minutes
  - {!snippet:prereq-editor-jdk-buildtools}
+ - Redis server (installation instructions below)
 
 ## {!snippet:how-to-complete-this-guide}
 
