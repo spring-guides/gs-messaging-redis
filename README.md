@@ -60,7 +60,7 @@ In a project directory of your choosing, create the following subdirectory struc
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework</groupId>
-    <artifactId>gs-messaging-redis</artifactId>
+    <artifactId>gs-messaging-redis-complete</artifactId>
     <version>0.1.0</version>
 
     <parent>
@@ -123,6 +123,7 @@ TODO: mention that we're using Spring Bootstrap's [_starter POMs_](../gs-bootstr
 Note to experienced Maven users who are unaccustomed to using an external parent project: you can take it out later, it's just there to reduce the amount of code you have to write to get started.
 
 ### Installing and running Redis
+
 Before we can build our messaging application, we need to set up the server that will handle receiving and sending messages.
 
 Redis is an open source, BSD-licensed, key-value data store. The server is freely available at <http://redis.io/download>. You can manually download it, or if happen to be using a Mac with homebrew:
@@ -162,7 +163,8 @@ You should expect something like this:
 <a name="initial"></a>
 Creating a Redis message receiver
 ---------------------------------
-In any messaging-based application, there are message publishers and messing receivers. To create the message receiver, you'll need to implement the `MessageListener` interface:
+
+In any messaging-based application, there are message publishers and messing receivers. To create the message receiver, you'll need to implement a Receiver with a method to respond to messages:
 
 `src/main/java/hello/Receiver.java`
 ```java
@@ -242,7 +244,7 @@ public class Application {
 
 This example sets up a `JedisConnectionFactory`, a Redis connection factory based on the [Jedis](https://github.com/xetorthio/jedis) Redis library. That connection factory is injected into both the message listener container and the Redis template.
 
-The bean defined in the `listenerAdapter()` method is registered as a message listener in the message listener container defined in `container()` and will listen for messages on the "chat" topic. Since the `Receiver` class is a POJO, it needs to be wraped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to know to call the `receiveMessage()` method on `Receiver` when a message arrives.
+The bean defined in the `listenerAdapter()` method is registered as a message listener in the message listener container defined in `container()` and will listen for messages on the "chat" topic. Since the `Receiver` class is a POJO, it needs to be wrapped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to call the `receiveMessage()` method on `Receiver` when a message arrives.
 
 The connection factory and message listener container beans are all you need to listen for messages. To send a message you'll also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
 
