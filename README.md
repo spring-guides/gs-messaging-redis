@@ -9,22 +9,22 @@ What you'll need
 ----------------
 
  - About 15 minutes
- - {!snippet:prereq-editor-jdk-buildtools}
+ - {!include#prereq-editor-jdk-buildtools}
  - Redis server (installation instructions below)
 
-## {!snippet:how-to-complete-this-guide}
+## {!include#how-to-complete-this-guide}
 
 <a name="scratch"></a>
 Set up the project
 ------------------
 
-{!snippet:build-system-intro}
+{!include#build-system-intro}
 
-{!snippet:create-directory-structure-hello}
+{!include#create-directory-structure-hello}
 
 ### Create a Maven POM
 
-{!snippet:maven-project-setup-options}
+{!include#maven-project-setup-options}
 
 `pom.xml`
 ```xml
@@ -80,7 +80,7 @@ Set up the project
 </project>
 ```
 
-{!snippet:bootstrap-starter-pom-disclaimer}
+{!include#bootstrap-starter-pom-disclaimer}
 
 ### Installing and running Redis
 Before we can build our messaging application, we need to set up the server that will handle receiving and sending messages.
@@ -212,7 +212,7 @@ The connection factory and message listener container beans are all you need to 
 
 The `main()` method kicks everything off by creating a Spring application context. This will start the message listener container and start listening for messages. It then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
 
-## {!snippet:build-an-executable-jar}
+## {!include#build-an-executable-jar}
 
 Run the application
 -------------------
