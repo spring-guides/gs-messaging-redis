@@ -3,7 +3,9 @@
 What you'll build
 -----------------
 
-This guide walks you through the process of using Spring to publish and subscribe to messages sent via Redis.
+This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
+
+> It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
 What you'll need
 ----------------
@@ -34,7 +36,7 @@ Set up the project
 
 Before you can build a messaging application, you need to set up the server that will handle receiving and sending messages.
 
-Redis is an open source, BSD-licensed, key-value data store. The server is freely available at <http://redis.io/download>. You can download it manually, or if you use a Mac with homebrew:
+Redis is an open source, BSD-licensed, key-value data store that also comes with a messaging system. The server is freely available at <http://redis.io/download>. You can download it manually, or if you use a Mac with homebrew:
 
     $ brew install redis
 
@@ -99,7 +101,7 @@ The bean defined in the `listenerAdapter()` method is registered as a message li
 
 The connection factory and message listener container beans are all you need to listen for messages. To send a message you also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
 
-The `main()` method kicks everything off by creating a Spring application context. This starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
+The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
 
 ## {!include#build-an-executable-jar}
 
