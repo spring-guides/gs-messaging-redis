@@ -52,8 +52,6 @@ In a project directory of your choosing, create the following subdirectory struc
 
 ### Create a Maven POM
 
-> **ERROR:** Section 'maven-project-setup-options' not found
-
 `pom.xml`
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
