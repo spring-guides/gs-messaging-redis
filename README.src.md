@@ -118,3 +118,5 @@ You should see the following output:
 Summary
 -------
 Congrats! You've just developed a simple publisher and subscriber application using Spring and Redis. You can do more with Spring and Redis than what is covered here, but this should provide a good start.
+
+[zip]: https://github.com/springframework-meta/gs-messaging-redis/archive/master.zip
