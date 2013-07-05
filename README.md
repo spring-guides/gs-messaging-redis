@@ -79,7 +79,7 @@ In a project directory of your choosing, create the following subdirectory struc
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>1.0.3.RELEASE</version>
+            <version>1.0.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -236,9 +236,7 @@ public class Application {
     
     @Bean
     MessageListenerAdapter listenerAdapter() {
-        MessageListenerAdapter adapter = new MessageListenerAdapter(new Receiver());
-        adapter.setDefaultListenerMethod("receiveMessage");
-        return adapter;
+        return new MessageListenerAdapter(new Receiver(), "receiveMessage");
     }
     
     @Bean
