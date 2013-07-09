@@ -1,4 +1,6 @@
+
 # Getting Started: Messaging with Redis
+
 
 What you'll build
 -----------------
@@ -6,6 +8,7 @@ What you'll build
 This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
 
 > It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
+
 
 What you'll need
 ----------------
@@ -19,6 +22,7 @@ What you'll need
 [mvn]: http://maven.apache.org/download.cgi
  - Redis server (installation instructions below)
 
+
 How to complete this guide
 --------------------------
 
@@ -29,11 +33,13 @@ To **start from scratch**, move on to [Set up the project](#scratch).
 To **skip the basics**, do the following:
 
  - [Download][zip] and unzip the source repository for this guide, or clone it using [git](/understanding/git):
-`git clone https://github.com/springframework-meta/{@project-name}.git`
- - cd into `{@project-name}/initial`
- - Jump ahead to [Create a resource representation class](#initial).
+`git clone https://github.com/springframework-meta/gs-messaging-redis.git`
+ - cd into `gs-messaging-redis/initial`
+ - Jump ahead to [Create a Redis message receiver](#initial).
 
-**When you're finished**, you can check your results against the code in `{@project-name}/complete`.
+**When you're finished**, you can check your results against the code in `gs-messaging-redis/complete`.
+[zip]: https://github.com/springframework-meta/gs-messaging-redis/archive/master.zip
+
 
 <a name="scratch"></a>
 Set up the project
@@ -73,7 +79,7 @@ In a project directory of your choosing, create the following subdirectory struc
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>1.0.3.RELEASE</version>
+            <version>1.0.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -128,41 +134,47 @@ Before you can build a messaging application, you need to set up the server that
 
 Redis is an open source, BSD-licensed, key-value data store that also comes with a messaging system. The server is freely available at <http://redis.io/download>. You can download it manually, or if you use a Mac with homebrew:
 
-    $ brew install redis
+```sh
+$ brew install redis
+```
 
 Once you unpack Redis, you can launch it with default settings.
 
-    $ redis-server
+```sh
+$ redis-server
+```
 
 You should see a message like this:
 
-    [35142] 01 May 14:36:28.939 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
-    [35142] 01 May 14:36:28.940 * Max number of open files set to 10032
-                    _._
-               _.-``__ ''-._
-          _.-``    `.  `_.  ''-._           Redis 2.6.12 (00000000/0) 64 bit
-      .-`` .-```.  ```\/    _.,_ ''-._
-     (    '      ,       .-`  | `,    )     Running in stand alone mode
-     |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
-     |    `-._   `._    /     _.-'    |     PID: 35142
-      `-._    `-._  `-./  _.-'    _.-'
-     |`-._`-._    `-.__.-'    _.-'_.-'|
-     |    `-._`-._        _.-'_.-'    |           http://redis.io
-      `-._    `-._`-.__.-'_.-'    _.-'
-     |`-._`-._    `-.__.-'    _.-'_.-'|
-     |    `-._`-._        _.-'_.-'    |
-      `-._    `-._`-.__.-'_.-'    _.-'
-          `-._    `-.__.-'    _.-'
-              `-._        _.-'
-                  `-.__.-'
+```sh
+[35142] 01 May 14:36:28.939 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+[35142] 01 May 14:36:28.940 * Max number of open files set to 10032
+                _._
+              _.-``__ ''-._
+        _.-``    `.  `_.  ''-._           Redis 2.6.12 (00000000/0) 64 bit
+    .-`` .-```.  ```\/    _.,_ ''-._
+  (    '      ,       .-`  | `,    )     Running in stand alone mode
+  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+  |    `-._   `._    /     _.-'    |     PID: 35142
+    `-._    `-._  `-./  _.-'    _.-'
+  |`-._`-._    `-.__.-'    _.-'_.-'|
+  |    `-._`-._        _.-'_.-'    |           http://redis.io
+    `-._    `-._`-.__.-'_.-'    _.-'
+  |`-._`-._    `-.__.-'    _.-'_.-'|
+  |    `-._`-._        _.-'_.-'    |
+    `-._    `-._`-.__.-'_.-'    _.-'
+        `-._    `-.__.-'    _.-'
+            `-._        _.-'
+                `-.__.-'
 
-    [35142] 01 May 14:36:28.941 # Server started, Redis version 2.6.12
-    [35142] 01 May 14:36:28.941 * The server is now ready to accept connections on port 6379
+[35142] 01 May 14:36:28.941 # Server started, Redis version 2.6.12
+[35142] 01 May 14:36:28.941 * The server is now ready to accept connections on port 6379
+```
 
 
 <a name="initial"></a>
 Create a Redis message receiver
----------------------------------
+-------------------------------
 
 In any messaging-based application, there are message publishers and messaging receivers. To create the message receiver, implement a receiver with a method to respond to messages:
 
@@ -181,7 +193,7 @@ The `Receiver` is a simple POJO that defines a method for receiving messages. As
 
 
 Register the listener and send a message
-----------------------------------------------
+----------------------------------------
 
 Spring Data Redis provides all the components you need to send and receive messages with Redis. Specifically, you need to configure:
 
@@ -224,9 +236,7 @@ public class Application {
     
     @Bean
     MessageListenerAdapter listenerAdapter() {
-        MessageListenerAdapter adapter = new MessageListenerAdapter(new Receiver());
-        adapter.setDefaultListenerMethod("receiveMessage");
-        return adapter;
+        return new MessageListenerAdapter(new Receiver(), "receiveMessage");
     }
     
     @Bean
@@ -244,12 +254,12 @@ public class Application {
 }
 ```
 
-
 The bean defined in the `listenerAdapter()` method is registered as a message listener in the message listener container defined in `container()` and will listen for messages on the "chat" topic. Because the `Receiver` class is a POJO, it needs to be wrapped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to call the `receiveMessage()` method on `Receiver` when a message arrives.
 
 The connection factory and message listener container beans are all you need to listen for messages. To send a message you also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
 
 The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
+
 
 ### Build an executable JAR
 
@@ -283,6 +293,7 @@ Now run the following to produce a single executable JAR file containing all nec
 
 [maven-shade-plugin]: https://maven.apache.org/plugins/maven-shade-plugin
 
+
 Run the application
 -------------------
 Run your application with `java -jar` at the command line:
@@ -295,6 +306,8 @@ You should see the following output:
     Sending message...
     Received <Hello from Redis!>
 
+
 Summary
 -------
 Congrats! You've just developed a simple publisher and subscriber application using Spring and Redis. You can do more with Spring and Redis than what is covered here, but this should provide a good start.
+

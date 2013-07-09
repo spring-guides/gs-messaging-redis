@@ -27,9 +27,7 @@ public class Application {
     
     @Bean
     MessageListenerAdapter listenerAdapter() {
-        MessageListenerAdapter adapter = new MessageListenerAdapter(new Receiver());
-        adapter.setDefaultListenerMethod("receiveMessage");
-        return adapter;
+        return new MessageListenerAdapter(new Receiver(), "receiveMessage");
     }
     
     @Bean
