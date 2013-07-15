@@ -301,6 +301,8 @@ Run your application with `java -jar` at the command line:
     java -jar target/gs-messaging-redis-0.1.0.jar
 
 
+
+
 You should see the following output:
 
     Sending message...
