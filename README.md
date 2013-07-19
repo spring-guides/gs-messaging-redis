@@ -70,8 +70,8 @@ In a project directory of your choosing, create the following subdirectory struc
     <version>0.1.0</version>
 
     <parent>
-        <groupId>org.springframework.bootstrap</groupId>
-        <artifactId>spring-bootstrap-starters</artifactId>
+        <groupId>org.springframework.zero</groupId>
+        <artifactId>spring-starter-parent</artifactId>
         <version>0.5.0.BUILD-SNAPSHOT</version>
     </parent>
 
@@ -84,7 +84,6 @@ In a project directory of your choosing, create the following subdirectory struc
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.5</version>
         </dependency>
     </dependencies>
 
