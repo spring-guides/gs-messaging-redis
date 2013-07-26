@@ -1,7 +1,4 @@
 
-# Getting Started: Messaging with Redis
-
-
 What you'll build
 -----------------
 

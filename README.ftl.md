@@ -1,8 +1,5 @@
 <#assign project_id="gs-messaging-redis">
 
-# Getting Started: Messaging with Redis
-
-
 What you'll build
 -----------------
 
