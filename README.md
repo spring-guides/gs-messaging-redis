@@ -1,8 +1,9 @@
+This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
 
 What you'll build
 -----------------
 
-This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
+You'll build an application that uses `StringRedisTemplate` to publish a string message and has a POJO subscribe for it using `MessageListenerAdapter`.
 
 > It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
@@ -42,7 +43,7 @@ To **skip the basics**, do the following:
 Set up the project
 ------------------
 
-First you set up a basic build script. You can use any build system you like when building apps with Spring, but the code you need to work with [Maven](https://maven.apache.org) and [Gradle](http://gradle.org) is included here. If you're not familiar with either, refer to [Building Java Projects with Maven](/guides/gs/maven/) or [Building Java Projects with Gradle](/guides/gs/gradle/).
+First you set up a basic build script. You can use any build system you like when building apps with Spring, but the code you need to work with [Maven](https://maven.apache.org) and [Gradle](http://gradle.org) is included here. If you're not familiar with either, refer to [Building Java Projects with Maven](/guides/gs/maven) or [Building Java Projects with Gradle](/guides/gs/gradle/).
 
 ### Create the directory structure
 

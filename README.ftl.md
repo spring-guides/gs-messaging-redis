@@ -1,9 +1,10 @@
 <#assign project_id="gs-messaging-redis">
+This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
 
 What you'll build
 -----------------
 
-This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
+You'll build an application that uses `StringRedisTemplate` to publish a string message and has a POJO subscribe for it using `MessageListenerAdapter`.
 
 > It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
