@@ -28,9 +28,9 @@ Set up the project
 
 <@create_directory_structure_hello/>
 
-### Create a Maven POM
+### Create a Gradle build file
 
-    <@snippet path="pom.xml" prefix="initial"/>
+    <@snippet path="build.gradle" prefix="initial"/>
 
 <@bootstrap_starter_pom_disclaimer/>
 
@@ -111,10 +111,10 @@ The connection factory and message listener container beans are all you need to 
 The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
 
 
-## <@build_an_executable_jar/>
+## <@build_an_executable_jar_with_gradle/>
 
 
-<@run_the_application_with_maven/>
+<@run_the_application_with_gradle/>
 
 
 You should see the following output:
