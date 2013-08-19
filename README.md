@@ -5,7 +5,7 @@ What you'll build
 
 You'll build an application that uses `StringRedisTemplate` to publish a string message and has a POJO subscribe for it using `MessageListenerAdapter`.
 
-> It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
+> **Note:** It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
 
 What you'll need
@@ -20,7 +20,6 @@ What you'll need
 [gradle]: http://www.gradle.org/
 [mvn]: http://maven.apache.org/download.cgi
  - Redis server (installation instructions below)
-
 
 How to complete this guide
 --------------------------
@@ -39,7 +38,6 @@ To **skip the basics**, do the following:
 **When you're finished**, you can check your results against the code in `gs-messaging-redis/complete`.
 [zip]: https://github.com/springframework-meta/gs-messaging-redis/archive/master.zip
 [u-git]: /understanding/Git
-
 
 <a name="scratch"></a>
 Set up the project
@@ -227,7 +225,8 @@ The connection factory and message listener container beans are all you need to 
 
 The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
 
-
+Build an executable JAR
+-----------------------
 Now that your `Application` class is ready, you simply instruct the build system to create a single, executable jar containing everything. This makes it easy to ship, version, and deploy the service as an application throughout the development lifecycle, across different environments, and so forth.
 
 Update your Gradle `build.gradle` file's `buildscript` section, so that it looks like this:
@@ -288,5 +287,5 @@ You should see the following output:
 
 Summary
 -------
-Congrats! You've just developed a simple publisher and subscriber application using Spring and Redis. You can do more with Spring and Redis than what is covered here, but this should provide a good start.
+Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis. 
 
