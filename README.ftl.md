@@ -6,7 +6,7 @@ What you'll build
 
 You'll build an application that uses `StringRedisTemplate` to publish a string message and has a POJO subscribe for it using `MessageListenerAdapter`.
 
-> It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
+> **Note** It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
 
 What you'll need
@@ -16,9 +16,7 @@ What you'll need
  - <@prereq_editor_jdk_buildtools/>
  - Redis server (installation instructions below)
 
-
 ## <@how_to_complete_this_guide jump_ahead='Create a Redis message receiver'/>
-
 
 <a name="scratch"></a>
 Set up the project
@@ -110,8 +108,8 @@ The connection factory and message listener container beans are all you need to 
 
 The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
 
-
-## <@build_an_executable_jar_with_gradle/>
+<@build_an_executable_jar_mainhead/>
+<@build_an_executable_jar_with_gradle/>
 
 
 <@run_the_application_with_gradle/>
@@ -125,5 +123,5 @@ You should see the following output:
 
 Summary
 -------
-Congrats! You've just developed a simple publisher and subscriber application using Spring and Redis. You can do more with Spring and Redis than what is covered here, but this should provide a good start.
+Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis. 
 
