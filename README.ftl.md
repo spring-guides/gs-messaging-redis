@@ -6,7 +6,7 @@ What you'll build
 
 You'll build an application that uses `StringRedisTemplate` to publish a string message and has a POJO subscribe for it using `MessageListenerAdapter`.
 
-> **Note** It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
+> **Note:** It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
 
 
 What you'll need
