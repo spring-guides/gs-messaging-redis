@@ -246,7 +246,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:0.5.0.M2")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:0.5.0.M4")
     }
 }
 ```
