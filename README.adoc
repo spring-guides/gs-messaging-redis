@@ -18,7 +18,6 @@ include::https://raw.github.com/spring-guides/getting-started-macros/master/prer
 +
 - Redis server (installation instructions below)
 
-:jump_ahead: Create a Redis message receiver
 include::https://raw.github.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
 [[scratch]]
