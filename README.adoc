@@ -140,3 +140,5 @@ You should see the following output:
 == Summary
 Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis. 
 
+NOTE: http://gopivotal.com/products/redis[Redis support] is available.
+
