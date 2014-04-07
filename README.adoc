@@ -2,7 +2,7 @@
 tags: [messaging, redis]
 projects: [spring-data-redis]
 ---
-:spring_boot_version: 1.0.0.RELEASE
+:spring_boot_version: 1.0.1.RELEASE
 :toc:
 :icons: font
 :source-highlighter: prettify
