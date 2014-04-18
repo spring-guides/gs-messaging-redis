@@ -24,10 +24,9 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.data:spring-data-redis:1.1.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework.data:spring-data-redis")
     compile("redis.clients:jedis:2.1.0")
-    compile("cglib:cglib:2.2.2")
-    compile("org.slf4j:slf4j-log4j12")
     testCompile("junit:junit")
 }
 

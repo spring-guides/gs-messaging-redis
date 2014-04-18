@@ -1,5 +1,9 @@
 package hello;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,25 +13,40 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
+import java.util.concurrent.CountDownLatch;
+
 @Configuration
 public class Application {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
+
     @Bean
     JedisConnectionFactory connectionFactory() {
         return new JedisConnectionFactory();
     }
     
     @Bean
-    RedisMessageListenerContainer container(final JedisConnectionFactory connectionFactory) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer() {{
-            setConnectionFactory(connectionFactory);
-        }};
-        container.addMessageListener(listenerAdapter(), new PatternTopic("chat"));
+    RedisMessageListenerContainer container(JedisConnectionFactory connectionFactory,
+                                            MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("chat"));
         return container;
     }
     
     @Bean
-    MessageListenerAdapter listenerAdapter() {
-        return new MessageListenerAdapter(new Receiver(), "receiveMessage");
+    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+        return new MessageListenerAdapter(receiver, "receiveMessage");
+    }
+
+    @Bean
+    Receiver receiver(CountDownLatch latch) {
+        return new Receiver(latch);
+    }
+
+    @Bean
+    CountDownLatch latch() {
+        return new CountDownLatch(1);
     }
     
     @Bean
@@ -36,10 +55,12 @@ public class Application {
     }
     
     public static void main(String[] args) throws InterruptedException {
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Application.class);
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
         StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
-        System.out.println("Sending message...");
+        CountDownLatch latch = ctx.getBean(CountDownLatch.class);
+        LOGGER.info("Sending message...");
         template.convertAndSend("chat", "Hello from Redis!");
-        ctx.close();
+        latch.await();
+        System.exit(0);
     }
 }
