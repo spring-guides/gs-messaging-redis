@@ -99,6 +99,8 @@ include::complete/src/main/java/hello/Receiver.java[]
 
 The `Receiver` is a simple POJO that defines a method for receiving messages. As you'll see when you register the `Receiver` as a message listener, you can name the message-handling method whatever you want.
 
+NOTE: For demonstration purposes, it is autowired by its constructor with a countdown latch. That way, it can signal when it has received a message.
+
 
 == Register the listener and send a message
 
@@ -118,7 +120,7 @@ This example sets up a `JedisConnectionFactory`, a Redis connection factory base
 include::complete/src/main/java/hello/Application.java[]
 ----
 
-The bean defined in the `listenerAdapter()` method is registered as a message listener in the message listener container defined in `container()` and will listen for messages on the "chat" topic. Because the `Receiver` class is a POJO, it needs to be wrapped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to call the `receiveMessage()` method on `Receiver` when a message arrives.
+The bean defined in the `listenerAdapter` method is registered as a message listener in the message listener container defined in `container` and will listen for messages on the "chat" topic. Because the `Receiver` class is a POJO, it needs to be wrapped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to call the `receiveMessage()` method on `Receiver` when a message arrives.
 
 The connection factory and message listener container beans are all you need to listen for messages. To send a message you also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
 
