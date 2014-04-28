@@ -4,7 +4,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.0.BUILD-SNAPSHOT")
     }
 }
 
@@ -24,9 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter")
-    compile("org.springframework.data:spring-data-redis")
-    compile("redis.clients:jedis:2.1.0")
+    compile("org.springframework.boot:spring-boot-starter-redis")
     testCompile("junit:junit")
 }
 

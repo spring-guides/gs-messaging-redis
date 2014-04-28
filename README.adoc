@@ -2,7 +2,7 @@
 tags: [messaging, redis]
 projects: [spring-data-redis]
 ---
-:spring_boot_version: 1.0.2.RELEASE
+:spring_boot_version: 1.1.0.BUILD-SNAPSHOT
 :toc:
 :icons: font
 :source-highlighter: prettify
@@ -112,7 +112,7 @@ Spring Data Redis provides all the components you need to send and receive messa
 
 You'll use the Redis template to send messages and you will register the `Receiver` with the message listener container so that it will receive messages. The connection factory drives both the template and the message listener container, enabling them to connect to the Redis server.
 
-This example sets up a `JedisConnectionFactory`, a Redis connection factory based on the https://github.com/xetorthio/jedis[Jedis] Redis library. That connection factory is injected into both the message listener container and the Redis template.
+This example uses Spring Boot's default `RedisConnectionFactory`, an instance of `JedisConnectionFactory` which is based on the https://github.com/xetorthio/jedis[Jedis] Redis library. The connection factory is injected into both the message listener container and the Redis template.
 
 `src/main/java/hello/Application.java`
 [source,java]
