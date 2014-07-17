@@ -28,7 +28,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.data:spring-data-redis")
-    compile("redis.clients:jedis:2.1.0")
+    compile("redis.clients:jedis:2.4.2")
     testCompile("junit:junit")
 }
 
