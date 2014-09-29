@@ -2,7 +2,7 @@
 tags: [messaging, redis]
 projects: [spring-data-redis]
 ---
-:spring_boot_version: 1.1.6.RELEASE
+:spring_boot_version: 1.1.7.RELEASE
 :toc:
 :icons: font
 :source-highlighter: prettify
@@ -130,7 +130,7 @@ You should see the following output:
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::        (v1.1.6.RELEASE)
+ :: Spring Boot ::        (v1.1.7.RELEASE)
 
 2014-04-18 08:03:34.032  INFO 47002 --- [           main] hello.Application                        : Starting Application on retina with PID 47002 (/Users/gturnquist/src/spring-guides/gs-messaging-redis/complete/target/classes started by gturnquist)
 2014-04-18 08:03:34.062  INFO 47002 --- [           main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7a53c84a: startup date [Fri Apr 18 08:03:34 CDT 2014]; root of context hierarchy
