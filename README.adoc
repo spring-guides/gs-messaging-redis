@@ -18,6 +18,7 @@ NOTE: It may sound strange to be using Spring Data Redis as the means to publish
 
 == What you'll need
 
+:java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 +
 - Redis server (installation instructions below)
