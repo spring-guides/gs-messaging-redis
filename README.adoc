@@ -32,6 +32,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
 
 
+== Standing up a Redis server
 
 Before you can build a messaging application, you need to set up the server that will handle receiving and sending messages.
 
