@@ -148,3 +148,6 @@ Congratulations! You've just developed a simple publish-and-subscribe applicatio
 
 NOTE: http://gopivotal.com/products/redis[Redis support] is available.
 
+
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
+
