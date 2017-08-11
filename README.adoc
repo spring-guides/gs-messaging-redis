@@ -144,10 +144,16 @@ You should see the following output:
 ```
 
 == Summary
-Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis. 
+Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis.
 
 NOTE: http://gopivotal.com/products/redis[Redis support] is available.
 
+== See Also
+
+The following guides may also be helpful:
+
+* https://spring.io/guides/gs/messaging-rabbitmq/[Messaging with RabbitMQ]
+* https://spring.io/guides/gs/messaging-jms/[Messaging with JMS]
+* https://spring.io/guides/gs/spring-boot/[Building an Application with Spring Boot]
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
-
