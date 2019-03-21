@@ -32,7 +32,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 Before you can build a messaging application, you need to set up the server that will handle receiving and sending messages.
 
-Redis is an open source, BSD-licensed, key-value data store that also comes with a messaging system. The server is freely available at http://redis.io/download. You can download it manually, or if you use a Mac with homebrew:
+Redis is an open source, BSD-licensed, key-value data store that also comes with a messaging system. The server is freely available at https://redis.io/download. You can download it manually, or if you use a Mac with homebrew:
 
 ----
 brew install redis
@@ -58,7 +58,7 @@ You should see a message like this:
   |    `-._   `._    /     _.-'    |     PID: 35142
     `-._    `-._  `-./  _.-'    _.-'
   |`-._`-._    `-.__.-'    _.-'_.-'|
-  |    `-._`-._        _.-'_.-'    |           http://redis.io
+  |    `-._`-._        _.-'_.-'    |           https://redis.io
     `-._    `-._`-.__.-'_.-'    _.-'
   |`-._`-._    `-.__.-'    _.-'_.-'|
   |    `-._`-._        _.-'_.-'    |
@@ -142,7 +142,7 @@ You should see the following output:
 == Summary
 Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis.
 
-NOTE: http://gopivotal.com/products/redis[Redis support] is available.
+NOTE: https://pivotal.io/products/redis[Redis support] is available.
 
 == See Also
 
