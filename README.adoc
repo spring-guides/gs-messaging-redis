@@ -3,50 +3,61 @@
 :icons: font
 :source-highlighter: prettify
 :project_id: gs-messaging-redis
-This guide walks you through the process of using Spring Data Redis to publish and subscribe to messages sent via Redis.
 
-== What you'll build
+This guide walks you through the process of using Spring Data Redis to publish and
+subscribe to messages sent with Redis.
 
-You'll build an application that uses `StringRedisTemplate` to publish a string message and has a link:/understanding/POJO[POJO] subscribe for it using `MessageListenerAdapter`.
+== What You Will build
 
-NOTE: It may sound strange to be using Spring Data Redis as the means to publish messages, but as you'll discover, Redis not only provides a NoSQL data store, but a messaging system as well.
+You will build an application that uses `StringRedisTemplate` to publish a string message
+and has a POJO subscribe for the message by using `MessageListenerAdapter`.
+
+NOTE: It may sound strange to be using Spring Data Redis as the means to publish messages,
+but, as you will discover, Redis provides not only a NoSQL data store but a messaging
+system as well.
 
 
-== What you'll need
+== What You Need
 
 :java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 +
-- Redis server (installation instructions below)
+- A Redis server (See <<scratch>>)
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-gradle.adoc[]
-
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-maven.adoc[]
-
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
-
-
+[[scratch]]
 == Standing up a Redis server
 
-Before you can build a messaging application, you need to set up the server that will handle receiving and sending messages.
+Before you can build a messaging application, you need to set up the server that will
+handle receiving and sending messages.
 
-Redis is an open source, BSD-licensed, key-value data store that also comes with a messaging system. The server is freely available at https://redis.io/download. You can download it manually, or if you use a Mac with homebrew:
+Redis is an open source, BSD-licensed, key-value data store that also comes with a
+messaging system. The server is freely available at https://redis.io/download. You can
+download it manually, or, if you use a Mac, with Homebrew, by running the following
+command in a terminal window:
 
+====
+[source,bash]
 ----
 brew install redis
 ----
+====
 
-Once you unpack Redis, you can launch it with default settings.
+Once you unpack Redis, you can launch it with its default settings by running the following command:
 
+====
+[source,bash]
 ----
 redis-server
 ----
+====
 
-You should see a message like this:
+You should see a message similar to the following:
 
-....
+====
+[source,text]
+----
 [35142] 01 May 14:36:28.939 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
 [35142] 01 May 14:36:28.940 * Max number of open files set to 10032
                 _._
@@ -69,78 +80,146 @@ You should see a message like this:
 
 [35142] 01 May 14:36:28.941 # Server started, Redis version 2.6.12
 [35142] 01 May 14:36:28.941 * The server is now ready to accept connections on port 6379
-....
-
+----
+====
 
 [[initial]]
-== Create a Redis message receiver
+== Starting with Spring Initializr
 
-In any messaging-based application, there are message publishers and messaging receivers. To create the message receiver, implement a receiver with a method to respond to messages:
+For all Spring applications, you should start with the https://start.spring.io[Spring
+Initializr]. The Initializr offers a fast way to pull in all the dependencies you need for
+an application and does a lot of the set up for you. This example needs only the Spring
+for Redis dependency. The following image shows the Initializr set up for this sample
+project:
 
-`src/main/java/hello/Receiver.java`
-[source,java,tabsize=2]
+image::images/initializr.png[]
+
+NOTE: The preceding image shows the Initializr with Maven chosen as the build tool. You
+can also use Gradle. It also shows values of `com.example` and `messaging-redis` as the
+Group and Artifact, respectively. You will use those values throughout the rest of this
+sample.
+
+The following listing shows the `pom.xml` file that is created when you choose Maven:
+
+====
+[src,xml]
 ----
-include::complete/src/main/java/hello/Receiver.java[]
+include::complete/pom.xml[]
 ----
+====
 
-The `Receiver` is a simple POJO that defines a method for receiving messages. As you'll see when you register the `Receiver` as a message listener, you can name the message-handling method whatever you want.
+The following listing shows the `build.gradle` file that is created when you choose Gradle:
 
-NOTE: For demonstration purposes, it is autowired by its constructor with a countdown latch. That way, it can signal when it has received a message.
-
-
-== Register the listener and send a message
-
-Spring Data Redis provides all the components you need to send and receive messages with Redis. Specifically, you need to configure:
-
- - A connection factory
- - A message listener container
- - A Redis template
-
-You'll use the Redis template to send messages and you will register the `Receiver` with the message listener container so that it will receive messages. The connection factory drives both the template and the message listener container, enabling them to connect to the Redis server.
-
-This example uses Spring Boot's default `RedisConnectionFactory`, an instance of `JedisConnectionFactory` which is based on the https://github.com/xetorthio/jedis[Jedis] Redis library. The connection factory is injected into both the message listener container and the Redis template.
-
-`src/main/java/hello/Application.java`
-[source,java,tabsize=2]
+====
+[src,java]
 ----
-include::complete/src/main/java/hello/Application.java[]
+include::complete/build.gradle[]
 ----
+====
 
-The bean defined in the `listenerAdapter` method is registered as a message listener in the message listener container defined in `container` and will listen for messages on the "chat" topic. Because the `Receiver` class is a POJO, it needs to be wrapped in a message listener adapter that implements the `MessageListener` interface required by `addMessageListener()`. The message listener adapter is also configured to call the `receiveMessage()` method on `Receiver` when a message arrives.
+== Create a Redis Message Receiver
 
-The connection factory and message listener container beans are all you need to listen for messages. To send a message you also need a Redis template. Here, it is a bean configured as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the common use of Redis where both keys and values are `String`s.
+In any messaging-based application, there are message publishers and messaging receivers.
+To create the message receiver, implement a receiver with a method to respond to messages,
+as the following example (from `src/main/java/com/example/messagingredis/Receiver.java`)
+shows:
 
-The `main()` method kicks everything off by creating a Spring application context. The application context then starts the message listener container, and the message listener container bean starts listening for messages. The `main()` method then retrieves the `StringRedisTemplate` bean from the application context and uses it to send a "Hello from Redis!" message on the "chat" topic. Finally, it closes the Spring application context and the application ends.
+====
+[source,java]
+----
+include::complete/src/main/java/com/example/messagingredis/Receiver.java[]
+----
+====
+
+The `Receiver` is a POJO that defines a method for receiving messages. When you register
+the `Receiver` as a message listener, you can name the message-handling method whatever
+you want.
+
+NOTE: For demonstration purposes, the receiver is autowired by its constructor with a
+countdown latch. That way, it can signal when it has received a message.
+
+
+== Register the Listener and Send a Message
+
+Spring Data Redis provides all the components you need to send and receive messages with
+Redis. Specifically, you need to configure:
+
+- A connection factory
+- A message listener container
+- A Redis template
+
+You will use the Redis template to send messages, and you will register the `Receiver`
+with the message listener container so that it will receive messages. The connection
+factory drives both the template and the message listener container, letting them connect
+to the Redis server.
+
+This example uses Spring Boot's default `RedisConnectionFactory`, an instance of
+`JedisConnectionFactory` that is based on the https://github.com/xetorthio/jedis[Jedis]
+Redis library. The connection factory is injected into both the message listener container
+and the Redis template, as the following example (from
+`src/main/java/com/example/messagingredis/MessagingRedisApplication.java`) shows:
+
+====
+[source,java]
+----
+include::complete/src/main/java/com/example/messagingredis/MessagingRedisApplication.java[]
+----
+====
+
+The bean defined in the `listenerAdapter` method is registered as a message listener in
+the message listener container defined in `container` and will listen for messages on the
+`chat` topic. Because the `Receiver` class is a POJO, it needs to be wrapped in a message
+listener adapter that implements the `MessageListener` interface (which is required by
+`addMessageListener()`). The message listener adapter is also configured to call the
+`receiveMessage()` method on `Receiver` when a message arrives.
+
+The connection factory and message listener container beans are all you need to listen for
+messages. To send a message, you also need a Redis template. Here, it is a bean configured
+as a `StringRedisTemplate`, an implementation of `RedisTemplate` that is focused on the
+common use of Redis, where both keys and values are `String` instances.
+
+The `main()` method kicks off everything by creating a Spring application context. The
+application context then starts the message listener container, and the message listener
+container bean starts listening for messages. The `main()` method then retrieves the
+`StringRedisTemplate` bean from the application context and uses it to send a
+`Hello from Redis!` message on the `chat` topic. Finally, it closes the Spring application
+context, and the application ends.
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_mainhead.adoc[]
+
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
 
+You should see output similar to the following:
 
+====
+[source,text]
+----
 
-
-You should see the following output:
-
-```
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::        (v2.2.1.RELEASE)
+ :: Spring Boot ::        (v2.1.8.RELEASE)
 
-2014-04-18 08:03:34.032  INFO 47002 --- [           main] hello.Application                        : Starting Application on retina with PID 47002 (/Users/gturnquist/src/spring-guides/gs-messaging-redis/complete/target/classes started by gturnquist)
-2014-04-18 08:03:34.062  INFO 47002 --- [           main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7a53c84a: startup date [Fri Apr 18 08:03:34 CDT 2014]; root of context hierarchy
-2014-04-18 08:03:34.326  INFO 47002 --- [           main] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 2147483647
-2014-04-18 08:03:34.357  INFO 47002 --- [           main] hello.Application                        : Started Application in 0.605 seconds (JVM running for 0.899)
-2014-04-18 08:03:34.357  INFO 47002 --- [           main] hello.Application                        : Sending message...
-2014-04-18 08:03:34.370  INFO 47002 --- [    container-2] hello.Receiver                           : Received <Hello from Redis!>
-2014-04-18 08:03:34.379  INFO 47002 --- [       Thread-1] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@7a53c84a: startup date [Fri Apr 18 08:03:34 CDT 2014]; root of context hierarchy
-2014-04-18 08:03:34.380  INFO 47002 --- [       Thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 2147483647
-```
+2019-09-23 12:57:11.578  INFO 35396 --- [           main] c.e.m.MessagingRedisApplication          : Starting MessagingRedisApplication on Jays-MBP with PID 35396 (/Users/j/projects/guides/gs-messaging-redis/complete/target/classes started by j in /Users/j/projects/guides/gs-messaging-redis/complete)
+2019-09-23 12:57:11.581  INFO 35396 --- [           main] c.e.m.MessagingRedisApplication          : No active profile set, falling back to default profiles: default
+2019-09-23 12:57:11.885  INFO 35396 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-09-23 12:57:11.887  INFO 35396 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-09-23 12:57:11.914  INFO 35396 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13ms. Found 0 repository interfaces.
+2019-09-23 12:57:12.685  INFO 35396 --- [    container-1] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2019-09-23 12:57:12.685  INFO 35396 --- [    container-1] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2019-09-23 12:57:12.848  INFO 35396 --- [           main] c.e.m.MessagingRedisApplication          : Started MessagingRedisApplication in 1.511 seconds (JVM running for 3.685)
+2019-09-23 12:57:12.849  INFO 35396 --- [           main] c.e.m.MessagingRedisApplication          : Sending message...
+2019-09-23 12:57:12.861  INFO 35396 --- [    container-2] com.example.messagingredis.Receiver      : Received <Hello from Redis!>
+----
+====
 
 == Summary
-Congratulations! You've just developed a simple publish-and-subscribe application with Spring and Redis.
+
+Congratulations! You have just developed a publish-and-subscribe application with Spring
+and Redis.
 
 NOTE: https://pivotal.io/products/redis[Redis support] is available.
 
