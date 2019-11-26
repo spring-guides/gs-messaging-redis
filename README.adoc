@@ -78,7 +78,7 @@ You should see a message like this:
 In any messaging-based application, there are message publishers and messaging receivers. To create the message receiver, implement a receiver with a method to respond to messages:
 
 `src/main/java/hello/Receiver.java`
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Receiver.java[]
 ----
@@ -101,7 +101,7 @@ You'll use the Redis template to send messages and you will register the `Receiv
 This example uses Spring Boot's default `RedisConnectionFactory`, an instance of `JedisConnectionFactory` which is based on the https://github.com/xetorthio/jedis[Jedis] Redis library. The connection factory is injected into both the message listener container and the Redis template.
 
 `src/main/java/hello/Application.java`
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Application.java[]
 ----

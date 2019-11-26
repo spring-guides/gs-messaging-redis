@@ -7,17 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Receiver {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
 
-    private CountDownLatch latch;
+	private CountDownLatch latch;
 
-    @Autowired
-    public Receiver(CountDownLatch latch) {
-        this.latch = latch;
-    }
+	@Autowired
+	public Receiver(CountDownLatch latch) {
+		this.latch = latch;
+	}
 
-    public void receiveMessage(String message) {
-        LOGGER.info("Received <" + message + ">");
-        latch.countDown();
-    }
+	public void receiveMessage(String message) {
+		LOGGER.info("Received <" + message + ">");
+		latch.countDown();
+	}
 }
