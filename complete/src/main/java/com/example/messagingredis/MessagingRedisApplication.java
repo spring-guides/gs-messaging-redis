@@ -36,13 +36,8 @@ public class MessagingRedisApplication {
 	}
 
 	@Bean
-	Receiver receiver(CountDownLatch latch) {
-		return new Receiver(latch);
-	}
-
-	@Bean
-	CountDownLatch latch() {
-		return new CountDownLatch(1);
+	Receiver receiver() {
+		return new Receiver();
 	}
 
 	@Bean
@@ -55,12 +50,14 @@ public class MessagingRedisApplication {
 		ApplicationContext ctx = SpringApplication.run(MessagingRedisApplication.class, args);
 
 		StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
-		CountDownLatch latch = ctx.getBean(CountDownLatch.class);
+		Receiver receiver = ctx.getBean(Receiver.class);
 
-		LOGGER.info("Sending message...");
-		template.convertAndSend("chat", "Hello from Redis!");
+		while (receiver.getCount() == 0) {
 
-		latch.await();
+			LOGGER.info("Sending message...");
+			template.convertAndSend("chat", "Hello from Redis!");
+			Thread.sleep(500L);
+		}
 
 		System.exit(0);
 	}
