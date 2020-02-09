@@ -16,6 +16,7 @@ dependency-reduced-pom.xml
 .classpath
 .project
 .settings
+.attach_pid*
 
 # IntelliJ IDEA Files #
 

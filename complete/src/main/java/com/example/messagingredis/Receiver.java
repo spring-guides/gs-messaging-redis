@@ -1,23 +1,21 @@
 package com.example.messagingredis;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class Receiver {
     private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
 
-    private CountDownLatch latch;
-
-    @Autowired
-    public Receiver(CountDownLatch latch) {
-        this.latch = latch;
-    }
+    private AtomicInteger counter = new AtomicInteger();
 
     public void receiveMessage(String message) {
         LOGGER.info("Received <" + message + ">");
-        latch.countDown();
+        counter.incrementAndGet();
+    }
+
+    public int getCount() {
+        return counter.get();
     }
 }

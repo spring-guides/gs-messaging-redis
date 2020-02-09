@@ -135,8 +135,7 @@ The `Receiver` is a POJO that defines a method for receiving messages. When you 
 the `Receiver` as a message listener, you can name the message-handling method whatever
 you want.
 
-NOTE: For demonstration purposes, the receiver is autowired by its constructor with a
-countdown latch. That way, it can signal when it has received a message.
+NOTE: For demonstration purposes, the receiver is counting the messages received. That way, it can signal when it has received a message.
 
 
 == Register the Listener and Send a Message
