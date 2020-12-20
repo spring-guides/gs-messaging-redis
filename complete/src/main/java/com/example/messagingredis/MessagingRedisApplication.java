@@ -18,8 +18,7 @@ public class MessagingRedisApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MessagingRedisApplication.class);
 
 	@Bean
-	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
-			MessageListenerAdapter listenerAdapter) {
+	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
