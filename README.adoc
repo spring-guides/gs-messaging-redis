@@ -101,6 +101,33 @@ NOTE: You can also fork the project from Github and open it in your IDE or other
 
 == Create a Redis Message Receiver
 
+Redis configuration two file formats
+
+- properties
+====
+[source,text]
+----
+spring.redis.host=localhost
+spring.redis.port=6379
+spring.redis.password=123456
+spring.redis.database=0
+----
+====
+
+- yaml
+====
+[source,yaml]
+----
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+----
+====
+
+
 In any messaging-based application, there are message publishers and messaging receivers.
 To create the message receiver, implement a receiver with a method to respond to messages,
 as the following example (from `src/main/java/com/example/messagingredis/Receiver.java`)
