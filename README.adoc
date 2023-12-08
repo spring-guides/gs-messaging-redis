@@ -6,7 +6,7 @@
 This guide walks you through the process of using Spring Data Redis to publish and
 subscribe to messages sent with Redis.
 
-== What You Will build
+== What You Will Build
 
 You will build an application that uses `StringRedisTemplate` to publish a string message
 and has a POJO subscribe for the message by using `MessageListenerAdapter`.
