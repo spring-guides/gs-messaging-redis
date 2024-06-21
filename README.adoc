@@ -140,7 +140,7 @@ yyyy-mm-ddT07:08:48.663-04:00  INFO 18338 --- [container-1] com.example.messagin
 
 == Preparing to Build the Application
 
-To run the code without Spring Boot Docker Compose support, you need a version of RabbitMQ running locally to connect to.
+To run the code without Spring Boot Docker Compose support, you need a version of Redis running locally to connect to.
 To do this, you can use Docker Compose, but you must first make two changes to the `compose.yaml` file.
 First, modify the `ports` entry in `compose.yaml` to be `'6379:6379'`.
 Second, add a `container_name`.
