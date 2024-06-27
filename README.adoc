@@ -159,7 +159,7 @@ You can now run `docker compose up` to start the Redis server.
 Now you should have an external Redis server that is ready to accept requests.
 You can rerun the application and see the same output using your external Redis server.
 
-NOTE: No configuration is required in the `application.properties` file because the default values match the Redis server configuration in `compose.yaml`. Specifically, the properties `spring.data.redis.host` and `spring.data.redis.port` default to `localhost` and `6379` respectively.
+NOTE: No configuration is required in the `application.properties` file because the default values match the Redis server configuration in `compose.yaml`. Specifically, the properties `spring.data.redis.host` and `spring.data.redis.port` default to `localhost` and `6379` respectively. More information about connecting to Redis can be found in the https://docs.spring.io/spring-boot/reference/data/nosql.html#data.nosql.redis.connecting[Spring Boot documentation^].
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_and_execute_guide.adoc[]
 
