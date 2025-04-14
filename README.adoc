@@ -90,7 +90,7 @@ factory drives both the template and the message listener container, letting the
 to the Redis server.
 
 This example uses Spring Boot's default `RedisConnectionFactory`, an instance of
-`JedisConnectionFactory` that is based on the https://github.com/xetorthio/jedis[Jedis]
+`LettuceConnectionFactory` that is based on the https://github.com/redis/lettuce[Lettuce]
 Redis library. The connection factory is injected into both the message listener container
 and the Redis template, as the following example (from
 `src/main/java/com/example/messagingredis/MessagingRedisApplication.java`) shows:
